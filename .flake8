@@ -1,0 +1,18 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    .venv
+
+filename = *.py
+accept-encodings = utf-8
+inline-quotes = single
+max-complexity = 12
+max-linenumber = 500
+max-line-length = 119
+multiline-quotes = double
+per-file-ignores =
+    # The file we want to ignore
+    core/project/settings/templates/settings.dev.py:F821
+    core/project/settings/templates/settings.unittests.py:F821
+    core/project/settings/post.py:F821
