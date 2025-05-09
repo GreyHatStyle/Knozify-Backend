@@ -1,8 +1,9 @@
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import os
 
 sentry_sdk.init(
-    dsn="https://c9dacaa0011d1f42cdd9799e32d30199@o4509190046482432.ingest.us.sentry.io/4509286956728320",
+    dsn = f"https://{os.environ.get("SENTRY_DSN")}",
     # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
 
