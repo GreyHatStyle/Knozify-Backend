@@ -1,6 +1,10 @@
 from pathlib import Path
 
 from split_settings.tools import include, optional
+from dotenv import load_dotenv
+
+# INITIALIZING ENVIRONMENT VARIABLES
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(
@@ -13,4 +17,6 @@ include(
     'drf_conf.py',
     'logging.py',
     'simple_jwt.py',
+    'sentry.py',
+    'social_auths.py',
 )
