@@ -5,6 +5,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from account.models import User
+
 
 class GoogleAuthSerializer(serializers.Serializer):
     """
@@ -66,3 +68,12 @@ class GoogleAuthSerializer(serializers.Serializer):
         }
 
         return response
+
+
+class GetUserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        # fields = ['username', 'email', 'contact', 'last_login']
+        # TODO: Remove fields __all__ as its not safe, its just temporarily here for making frontend dev life easier.
+        fields = "__all__"
+        
