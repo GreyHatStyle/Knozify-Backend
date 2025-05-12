@@ -16,6 +16,7 @@ include(
     'databases.py',
     'drf_conf.py',
     'logging.py',
+    'redis.py',
     'simple_jwt.py',
     'sentry.py',
     'social_auths.py',
