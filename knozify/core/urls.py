@@ -16,9 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.shortcuts import render, redirect
+
 
 urlpatterns = [
+    # path('', lambda request: render(request, "index.html"), name="home"),
+    path('', lambda request: redirect("https://knozify-web.vercel.app/"), name="home"),
+
     path('admin/', admin.site.urls),
+    path("search/", include("watson.urls", namespace="watson")),
 ]
 
 # Apps Urls

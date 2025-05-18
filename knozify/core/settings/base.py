@@ -22,7 +22,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG_ENV'))
 
-ALLOWED_HOSTS = ['knozifies.live']
+ALLOWED_HOSTS = ['knozifies.live', '127.0.0.1']
 AUTH_USER_MODEL = 'account.User'
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS += [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'watson',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'watson.middleware.SearchContextMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True # TODO: Change it when our frontend dev get a url

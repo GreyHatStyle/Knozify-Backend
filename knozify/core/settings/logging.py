@@ -13,15 +13,20 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "file": {
-            "class":
-            "logging.FileHandler",
-            "filename":
-            str(LOGS_DIR / os.environ.get('DJANGO_LOG_FILE', 'django.log')),
-            "level":
-            os.environ.get('DJANGO_LOG_LEVEL'),
-            "formatter":
-            "verbose",
+        # "file": {
+        #     "class":
+        #     "logging.FileHandler",
+        #     "filename":
+        #     str(LOGS_DIR / os.environ.get('DJANGO_LOG_FILE', 'django.log')),
+        #     "level":
+        #     os.environ.get('DJANGO_LOG_LEVEL'),
+        #     "formatter":
+        #     "verbose",
+        # },
+        'logtail': {
+            'class': 'logtail.LogtailHandler',
+            'source_token': os.environ.get("BETTERSTACK_SOURCE_TOKEN"),
+            'host': os.environ.get("BETERSTACK_INGESTING_HOST"),
         },
         "console": {
             "class": "logging.StreamHandler",
@@ -30,9 +35,9 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {
+        "account": {
             "level": os.environ.get('DJANGO_LOG_LEVEL'),
-            "handlers": ["file", "console"],
+            "handlers": ["console", "logtail"],
         },
     },
     "formatters": {
