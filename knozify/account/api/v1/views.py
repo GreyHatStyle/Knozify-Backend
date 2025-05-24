@@ -233,11 +233,17 @@ class Registration_API(APIView):
 
             if serializer.is_valid():
                 user = serializer.save()
+                refresh = RefreshToken.for_user(user)
+
                 logger.info(f"User {user.username} is successfully created!!!")
 
                 return Response({
                     "status": "success",
                     "reason": f"User, {user.username} created successfully!!",
+                    "tokens": {
+                        "refresh":str(refresh),
+                        "access":str(refresh.access_token),
+                    }
                 }, status=status.HTTP_201_CREATED) 
 
             return Response({
