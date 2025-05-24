@@ -1,6 +1,7 @@
+import os
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-import os
 
 sentry_sdk.init(
     dsn = f"https://{os.environ.get("SENTRY_DSN")}",

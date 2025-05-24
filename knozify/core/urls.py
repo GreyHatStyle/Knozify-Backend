@@ -15,9 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
-from django.shortcuts import render, redirect
-
 
 urlpatterns = [
     # path('', lambda request: render(request, "index.html"), name="home"),

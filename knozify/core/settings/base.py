@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+
 from . import BASE_DIR
 
 # Quick-start development settings - unsuitable for production

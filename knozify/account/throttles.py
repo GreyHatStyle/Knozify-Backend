@@ -1,9 +1,11 @@
+import time
+
 from django.core.cache import cache
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.throttling import BaseThrottle
 from rest_framework.response import Response
-import time
+from rest_framework.throttling import BaseThrottle
+
 
 class LoginRateThrottle(BaseThrottle):
     """

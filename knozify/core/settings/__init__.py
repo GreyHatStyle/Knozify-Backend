@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from split_settings.tools import include, optional
 from dotenv import load_dotenv
+from split_settings.tools import include, optional
 
 # INITIALIZING ENVIRONMENT VARIABLES
 load_dotenv()

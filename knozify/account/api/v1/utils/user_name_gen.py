@@ -1,6 +1,8 @@
-from datetime import datetime
-from account.models import User
 import random
+from datetime import datetime
+
+from account.models import User
+
 
 class Generate_Username:
 
