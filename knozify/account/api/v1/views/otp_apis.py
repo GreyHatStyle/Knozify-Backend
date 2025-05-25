@@ -30,7 +30,6 @@ class Send_OTP_to_Number_API(BaseAPIView):
 
         return Response({
             "status": "success",
-            "otp": otp,
             "time_left_seconds": time_left, 
         })
         

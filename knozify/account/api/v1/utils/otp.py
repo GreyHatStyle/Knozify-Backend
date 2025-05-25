@@ -64,70 +64,25 @@ class OTP_Handler:
         Send OTP to User's phone number Via TextBee Open source API
         """
         otp = self.__generate_otp()
+    
+        api_url = os.environ.get("SMS_SENDER_API")
+        api_key = os.environ.get("TEXTBEE_API_KEY")
+    
+        payload = json.dumps({"recipients": [self.__phone_no], "message": f"Your Knozify OTP is: {otp}."})
+    
+        cmd = [
+            "curl",
+            "-X", "POST", api_url,
+            "-H", f"x-api-key: {api_key}",
+            "-H", "Content-Type: application/json",
+            "-d", payload
+        ]
 
-        # BUG: For some reason this api isn't working when called with backend, but with frontend it is
-        # api_url = os.environ.get("SMS_SENDER_API")
-        # api_key = os.environ.get("TEXTBEE_API_KEY")
-
-        # api_url = f"https://{api_url}"
-        # print("API URL: ", api_url)
-
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        self.__logger.debug(f"stdout: {result.stdout}")
+        self.__logger.debug(f"stderr: {result.stderr}")
         
-        # # headers = {
-        # #     "Content-Type": "application/json",
-        # #     "x-api-key": api_key,
-        # # }
-
-        # payload = {
-        #     "recipients": [self.__phone_no],
-        #     "message": f"Thanks for using Knozify!!\nYour OTP is: {otp}."
-        # }
-
-        # node_js_file = settings.BASE_DIR / "account" / "sms-sender.js"
-        # print("NODE JS FILE: ", node_js_file)
-        # # # Convert to properly escaped JSON string
-        # # json_payload = json.dumps(payload)
-
-        # # # Build the command with the properly formatted JSON
-        # # command = f"""curl -X POST "{api_url}" -H "x-api-key: {api_key}" -H "Content-Type: application/json" -d '{json_payload}'"""
-        # # node_command = f""" node {node_js_file} "{api_url}" "{api_key}" "{self.__phone_no}" "Thanks for using Knozify!!\nYour OTP is: {otp}." """
-
-        # command_parts = [
-        #     "node",
-        #     str(node_js_file),  # Ensure the Path object is converted to a string
-        #     api_url,
-        #     api_key,
-        #     self.__phone_no,
-        #     f"Thanks for using Knozify!!\nYour OTP is: {otp}."
-        # ]
-
-        # try:
-        #     result = subprocess.run(
-        #         command_parts,
-        #         capture_output=True,  # Equivalent to stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        #         text=True,            # Decode stdout/stderr as text
-        #         check=False           # Manually check returncode, so don't raise error on non-zero exit
-        #     )
-        # except FileNotFoundError:
-        #     self.__logger.error("Error: 'node' executable not found. Make sure Node.js is installed and in your PATH.")
-        #     return False
-        # except Exception as e: # Catch other potential subprocess errors
-        #     self.__logger.error(f"Subprocess execution failed: {e}, STDOUT: {getattr(e, 'stdout', '')}, STDERR: {getattr(e, 'stderr', '')}")
-        #     return False
-
-
         self.__store_otp_in_redis(otp=otp)
-
-        # Some loggings for debugging
-        # TODO I know its trash way to log, I will fix it soon
-        # if result.returncode == status.HTTP_201_CREATED:
-        #     self.__logger.info(f"API HAS BEEN SENT: BODY: {result.stdout}")
-        #     return True
-        
-        # else:
-        #     self.__logger.error(f"Some error occurred, BODY: {result.stderr}")
-        #     return False
-        
         return otp
 
     def time_left(self):

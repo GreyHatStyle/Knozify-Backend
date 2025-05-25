@@ -44,3 +44,6 @@ htmlcov/
 # System files
 .DS_Store
 Thumbs.db
+
+# apache conf
+apache.conf
