@@ -22,7 +22,7 @@ class OTP_Handler:
     """
 
     def __init__(self, phone_number: str):
-        self.__phone_no = phone_number
+        self.__phone_no = phone_number.replace("-", "") # making it compatible for (textbee api)
         self.__time_left_seconds = 120
 
         # will give user 10 seconds more after expiration time to complete otp request
@@ -68,8 +68,9 @@ class OTP_Handler:
         api_url = os.environ.get("SMS_SENDER_API")
         api_key = os.environ.get("TEXTBEE_API_KEY")
     
-        payload = json.dumps({"recipients": [self.__phone_no], "message": f"Your Knozify OTP is: {otp}."})
-    
+        payload = json.dumps({"recipients": [self.__phone_no], "message": f"Your Knozify OTP is {otp}."})
+
+        # using subprocess, because for some reason 'requests.post' method is not working with textbee api (for django only)
         cmd = [
             "curl",
             "-X", "POST", api_url,

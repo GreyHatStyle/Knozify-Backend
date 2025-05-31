@@ -3,7 +3,7 @@ from watson import search
 
 from ..serializers import UserNameSerializer
 from ..utils import Generate_Username
-from ._base import AllowAny, APIView, Response, status
+from ._base import AllowAny, APIView, Response, api_exception_handler, status
 
 
 class Suggest_Username_API(APIView):
@@ -15,6 +15,7 @@ class Suggest_Username_API(APIView):
     """
     permission_classes = [AllowAny]
 
+    @api_exception_handler
     def post(self, request):
         first_name = request.data.get("first_name")
         last_name = request.data.get("last_name")
@@ -38,6 +39,7 @@ class Check_Username_Exists_API(APIView):
     """
     permission_classes = [AllowAny]
 
+    @api_exception_handler
     def post(self, request):
 
         user_name = request.data.get("username")

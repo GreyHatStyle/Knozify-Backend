@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ..serializers import UserRegistrationSerializer
-from ._base import AllowAny, BaseAPIView, Response, status
+from ._base import AllowAny, BaseAPIView, Response, api_exception_handler, status
 
 
 class Registration_API(BaseAPIView):
@@ -10,6 +10,7 @@ class Registration_API(BaseAPIView):
     """
     permission_classes = [AllowAny]
 
+    @api_exception_handler
     def post(self, request):
 
         serializer = UserRegistrationSerializer(data=request.data)

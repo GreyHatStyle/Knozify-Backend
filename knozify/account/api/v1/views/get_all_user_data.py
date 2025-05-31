@@ -1,7 +1,7 @@
 from account.models import User
 
 from ..serializers import GetUserInfoSerializer
-from ._base import BaseAPIView, IsAuthenticated, Response, status
+from ._base import BaseAPIView, IsAuthenticated, Response, api_exception_handler, status
 
 
 # TODO: This api sending every details... change it as soon as frontend dev is done with his work.
@@ -11,6 +11,7 @@ class GetUserDataAPIView(BaseAPIView):
     """
     permission_classes = [IsAuthenticated]
 
+    @api_exception_handler
     def get(self, request):
         query_set = User.objects.get(id=request.user.id)
         serializer = GetUserInfoSerializer(query_set)
