@@ -3,12 +3,8 @@ import logging
 import os
 import subprocess
 from random import randint
-from urllib.parse import unquote
 
-import requests
-from django.conf import settings
 from django.core.cache import caches
-from rest_framework import status
 
 
 class OTP_Handler:
@@ -27,43 +23,43 @@ class OTP_Handler:
 
         # will give user 10 seconds more after expiration time to complete otp request
         # Considering API request delay
-        self.__buffer_time = 10
+        self._buffer_time = 10
 
-        self.__cache_obj = caches["otp"]
-        self.__otp_length = 6
+        self._cache_obj = caches["otp"]
+        self._otp_length = 6
 
-        self.__logger = logging.getLogger(__name__)
+        self._logger = logging.getLogger(__name__)
 
-    def __generate_otp(self) -> str:
+    def _generate_otp(self) -> str:
         """
         Generate a random otp of `self.__otp_length` size.
         """
         
-        start_limit = 10 ** (self.__otp_length - 1) # in case of (6), 100000
-        end_limit = (10 ** self.__otp_length) - 1   # in case of (6), 999999
+        start_limit = 10 ** (self._otp_length - 1) # in case of (6), 100000
+        end_limit = (10 ** self._otp_length) - 1   # in case of (6), 999999
 
         random_number = randint(start_limit, end_limit)
         otp = str(random_number)
 
         return otp
     
-    def __store_otp_in_redis(self, otp):
+    def _store_otp_in_redis(self, otp):
         """
         Will new store otp in redis cache, for designated expiration time.\n
         If person ask for new otp, the it will over-write old otp.
         """
 
-        self.__cache_obj.set(
+        self._cache_obj.set(
             key=self.__phone_no,
             value=otp,
-            timeout=(self.__time_left_seconds + self.__buffer_time),
+            timeout=(self.__time_left_seconds + self._buffer_time),
         )
 
     def send_otp(self) -> int:
         """
         Send OTP to User's phone number Via TextBee Open source API
         """
-        otp = self.__generate_otp()
+        otp = self._generate_otp()
     
         api_url = os.environ.get("SMS_SENDER_API")
         api_key = os.environ.get("TEXTBEE_API_KEY")
@@ -80,10 +76,10 @@ class OTP_Handler:
         ]
 
         result = subprocess.run(cmd, capture_output=True, text=True)
-        self.__logger.debug(f"stdout: {result.stdout}")
-        self.__logger.debug(f"stderr: {result.stderr}")
+        self._logger.debug(f"stdout: {result.stdout}")
+        self._logger.debug(f"stderr: {result.stderr}")
         
-        self.__store_otp_in_redis(otp=otp)
+        self._store_otp_in_redis(otp=otp)
         return otp
 
     def time_left(self):
@@ -101,7 +97,7 @@ class OTP_Handler:
         c = caches['otp']
 
         user_provided_otp = otp
-        server_generated_otp = c.get(phone_no)
+        server_generated_otp = c.get(phone_no.replace("-", ""))
 
         if user_provided_otp != server_generated_otp:
             print("Server generated OTP: ", server_generated_otp)

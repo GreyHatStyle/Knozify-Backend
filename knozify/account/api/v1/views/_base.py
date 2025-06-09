@@ -5,6 +5,7 @@ import logging
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,7 +16,16 @@ class BaseAPIView(APIView):
     This DRF BaseAPIView will help me to not add logger in every file.
     """
     permission_classes = [AllowAny]
+    renderer_classes = [JSONRenderer]
     logger = logger
+    
+    
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        return Response({
+            "detail": "It doesn't support this request sir, kindly check documentation.",
+        }, 
+        status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        content_type="application/json")
 
 
 def api_exception_handler(api_view_method):
@@ -27,6 +37,25 @@ def api_exception_handler(api_view_method):
     def wrapper(self, request, *args, **kwargs):
         try:
             return api_view_method(self, request, *args, **kwargs)
+        
+        except ValueError as ve:
+            ve = str(ve)
+            detail_for_user = ""
+            
+            if ("pydantic" in ve) and ("Value error, " in ve):
+                start_index = ve.find("Value error, ") + len("Value error, ")
+                end_index = ve.find(" [type=value_error")
+                
+                detail_for_user = ve[start_index:end_index]
+            
+            else:
+                detail_for_user = ""
+                
+            return Response({
+                "status": "error",
+                "reason": ve,
+                "detail_for_user": detail_for_user,
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
             return Response({

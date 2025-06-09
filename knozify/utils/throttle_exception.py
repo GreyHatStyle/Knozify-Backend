@@ -10,7 +10,8 @@ class TimeThrottleMix:
         response = super().handle_exception(exc)
         if isinstance(exc, Throttled) and response is not None:
             response.data['time_left'] = exc.wait
-
+            response.data['detail_for_user'] = f"Too many request, please wait for {exc.wait} seconds"
+            
         return response
 
         

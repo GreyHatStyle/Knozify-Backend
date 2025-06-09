@@ -23,7 +23,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG_ENV'))
 
-ALLOWED_HOSTS = ['knozifies.live', '127.0.0.1']
+#TODO: Remove these hosts in future
+ALLOWED_HOSTS = ['knozifies.live', '127.0.0.1', '[::1]']
 AUTH_USER_MODEL = 'account.User'
 
 # Application definition

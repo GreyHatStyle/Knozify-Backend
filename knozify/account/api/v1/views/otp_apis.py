@@ -10,13 +10,13 @@ class PhoneNumber_Validation(BaseModel):
     phone_no: str = Field(..., description="Phone number with country code")
     
     @field_validator("phone_no")
-    def validate_phone_number(cls, v):
+    def validate_phone_number(cls, value):
         pattern = r'^\+([1-9]{1,3})-([0-9]{10})$'
         
-        if not re.match(pattern, v):
+        if not re.match(pattern, value):
             raise ValueError('Invalid Phone number format, please ensure country code is correct, eg: "+9190812334xx".')   
     
-        return v
+        return value
 
 class Send_OTP_to_Number_API(BaseAPIView):
     """
