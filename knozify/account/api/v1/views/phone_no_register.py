@@ -54,7 +54,8 @@ class Send_OTP_to_Number_API(BaseAPIView):
 
 class OTP_Validator_API(BaseAPIView):
     """
-    This API will receive the User provided OTP, and verify it with Original OTP, then return response in boolean.
+    This API will receive the User provided OTP, and verify it with Original OTP.
+    - if verified, create a initial record with only phone number in it
     """
     permission_classes = [AllowAny]
 

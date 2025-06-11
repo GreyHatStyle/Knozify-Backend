@@ -61,6 +61,7 @@ def api_exception_handler(api_view_method):
             return Response({
                 "status": "exception",
                 "reason": str(e),
+                "detail_for_user":"This request can't be fulfilled yet, if this repeats kindly report to admin, Thanks."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
     return wrapper

@@ -27,10 +27,13 @@ class Registration_API(BaseAPIView):
                 "tokens": {
                     "refresh":str(refresh),
                     "access":str(refresh.access_token),
-                }
+                },
+                "detail_for_user": "successful!!",
             }, status=status.HTTP_201_CREATED) 
 
+        error_for_user = next(iter(serializer.errors.values()))[0] # just getting first error from all errors
         return Response({
             "status": "error",
             "reason": serializer.errors,
+            "detail_for_user": error_for_user,
         }, status=status.HTTP_400_BAD_REQUEST)
